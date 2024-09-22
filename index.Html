@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Record</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script type="module" src="app.js"></script>
+</head>
+<body>
+    <h1>Medicine Record</h1>
+
+    <!-- Add Medicine Section -->
+    <div>
+        <h2>Add Medicine</h2>
+        <input type="text" id="medicineIdInput" placeholder="Medicine ID" required>
+        <input type="text" id="medicineNameInput" placeholder="Medicine Name" required>
+        <input type="number" id="medicineAmountInput" placeholder="Amount" required>
+        <input type="text" id="expiryDateInput" placeholder="Expiry Date" required>
+        <button id="addMedicineButton">Add Medicine</button>
+    </div>
+
+    <!-- Get Medicine Details Section -->
+    <div>
+        <h2>Get Medicine Details</h2>
+        <input type="text" id="getMedicineIdInput" placeholder="Medicine ID" required>
+        <button id="getMedicineButton">Get Medicine Details</button>
+        <div id="medicineInfo"></div>
+    </div>
+
+    <!-- Display success or error messages -->
+    <div id="statusMessage"></div>
+
+</body>
+</html>

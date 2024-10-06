@@ -1,16 +1,14 @@
-// MetaMask connection and contract setup
+import { uploadToIPFS } from './ipfs.js';
+import { contractABI } from './consts.js';
+import { contractAddress } from './consts.js';
+
 async function connectToMetaMask() {
     if (typeof window.ethereum !== 'undefined') {
         try {
-            // Request account access
-            await window.ethereum.request({method: 'eth_requestAccounts'});
-
-            // Initialize the ethers provider
+            await window.ethereum.request({ method: 'eth_requestAccounts' });
             const provider = new ethers.providers.Web3Provider(window.ethereum);
             const signer = provider.getSigner();
             console.log('Connected to MetaMask');
-
-            // Update UI with wallet address
             const walletAddress = await signer.getAddress();
             document.getElementById("statusMessage").innerText = `Connected wallet: ${walletAddress}`;
 
@@ -23,389 +21,198 @@ async function connectToMetaMask() {
     }
 }
 
-// Smart contract ABI and address (replace with your own contract details)
-const contractABI = [
-	{
-		"inputs": [],
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"name": "AdminAdded",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "admin",
-				"type": "address"
-			}
-		],
-		"name": "AdminRemoved",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "id",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "name",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "medicineAmount",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "expiryDate",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "ipfsHash",
-				"type": "string"
-			}
-		],
-		"name": "MedicineAdded",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "id",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "newMedicineAmount",
-				"type": "uint256"
-			}
-		],
-		"name": "MedicineAmountUpdated",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "id",
-				"type": "string"
-			}
-		],
-		"name": "MedicineRemoved",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_admin",
-				"type": "address"
-			}
-		],
-		"name": "addAdmin",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_medicineAmount",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_expiryDate",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_ipfsHash",
-				"type": "string"
-			}
-		],
-		"name": "addMedicine",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"name": "admins",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getAllMedicineIds",
-		"outputs": [
-			{
-				"internalType": "string[]",
-				"name": "",
-				"type": "string[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getHash",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "getMedicineAmount",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "getMedicineDate",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "getMedicineHash",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "getMedicineName",
-		"outputs": [
-			{
-				"internalType": "string",
-				"name": "",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_admin",
-				"type": "address"
-			}
-		],
-		"name": "removeAdmin",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			}
-		],
-		"name": "removeMedicine",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "x",
-				"type": "string"
-			}
-		],
-		"name": "sendHash",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_id",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amountToSubtract",
-				"type": "uint256"
-			}
-		],
-		"name": "subtractMedicineAmount",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	}
-];
 
-const contractAddress = "0x059fdbb610d95d9dd72d204b1fed8362bd9611cc";
-
-// Load the contract
 async function loadContract() {
+    console.log("Loading contract...");
     const { signer } = await connectToMetaMask();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    console.log("Contract loaded:", contract);
     return contract;
 }
 
-// Event listener for adding medicine
 document.getElementById('addMedicineButton').addEventListener('click', async () => {
     try {
+        console.log("Add Medicine button clicked.");
         const contract = await loadContract();
+        const medicineDocument = document.getElementById('medicineDocument').files[0];
 
-        const medicineId = document.getElementById('medicineIdInput').value;
-        const medicineName = document.getElementById('medicineNameInput').value;
-        const medicineAmount = document.getElementById('medicineAmountInput').value;
-        const expiryDate = document.getElementById('expiryDateInput').value;
+        const medicineId = document.getElementById('medicineId').value;
+        const medicineName = document.getElementById('medicineName').value;
+        const medicineAmount = document.getElementById('medicineAmount').value;
+        const expiryDate = document.getElementById('expiryDate').value;
 
-        const tx = await contract.addMedicine(medicineId, medicineName, medicineAmount, expiryDate);
+        console.log("Input values:", { medicineId, medicineName, medicineAmount, expiryDate, medicineDocument });
+
+        if (!medicineId || !medicineName || !medicineAmount || !expiryDate || !medicineDocument) {
+            console.error('One or more input fields are missing.');
+            document.getElementById("statusMessage").innerText = 'Please fill in all fields and select a document.';
+            return;
+        }
+
+        const ipfsHash = await uploadToIPFS(medicineDocument);
+        console.log("IPFS Hash:", ipfsHash);
+
+        const tx = await contract.addMedicine(medicineId, medicineName, medicineAmount, expiryDate, ipfsHash);
         await tx.wait();
+        console.log("Transaction completed:", tx);
 
         document.getElementById("statusMessage").innerText = 'Medicine added successfully!';
     } catch (error) {
-        document.getElementById("statusMessage").innerText = `Error: ${error.message}`;
+        document.getElementById("statusMessage").innerText = `Error : ${error.message}`;
+        console.error("Error adding medicine:", error);
     }
 });
 
-// Event listener for getting medicine details
+document.getElementById('removeMedicineButton').addEventListener('click', async () => {
+    try {
+        console.log("Remove Medicine button clicked.");
+        const contract = await loadContract();
+        const medicineId = document.getElementById('medicineId').value;
+
+        console.log("Medicine ID:", medicineId);
+
+        if (!medicineId) {
+            console.error('Medicine ID is missing.');
+            document.getElementById("statusMessage").innerText = 'Please enter a Medicine ID.';
+            return;
+        }
+
+        const tx = await contract.removeMedicine(medicineId);
+        await tx.wait();
+        console.log("Transaction completed:", tx);
+
+        document.getElementById("statusMessage").innerText = 'Medicine removed successfully!';
+    } catch (error) {
+        document.getElementById("statusMessage").innerText = `Error : ${error.message}`;
+        console.error("Error removing medicine:", error);
+    }
+});
+
 document.getElementById('getMedicineButton').addEventListener('click', async () => {
     try {
+        console.log("Get Medicine button clicked.");
         const contract = await loadContract();
+        const medicineId = document.getElementById('getMedicineId').value;
 
-        const medicineId = document.getElementById('getMedicineIdInput').value;
-        const medicineDetails = await contract.getMedicineDetails(medicineId);
-
-        document.getElementById("medicineInfo").innerText = `
-            Medicine Name: ${medicineDetails[0]},
-            Amount: ${medicineDetails[1]},
-            Expiry Date: ${medicineDetails[2]}
+        console.log("Fetching details for Medicine ID:", medicineId);
+        const medicineInfo = await contract.getMedicine(medicineId);
+        const { name, medicineAmount, expiryDate, ipfsHash } = medicineInfo;
+        const ipfsLink = `https://ipfs.io/ipfs/${ipfsHash}`;
+        
+        document.getElementById('medicineInfo').innerHTML = `
+            <p>Medicine Name: ${name}</p>
+            <p>Amount: ${medicineAmount}</p>
+            <p>Expiry Date: ${expiryDate}</p>
+            <p>Document: <a href="${ipfsLink}" target="_blank">View Document</a></p>
         `;
     } catch (error) {
-        document.getElementById("medicineInfo").innerText = `Error: ${error.message}`;
+        document.getElementById("medicineInfo").innerText = `There was an Error: ${error.message}`;
+        console.error("Error fetching medicine details:", error);
     }
 });
+
+document.getElementById('subtractMedicineButton').addEventListener('click', async () => {
+    try {
+        console.log("Subtract Medicine button clicked.");
+        const contract = await loadContract();
+        const medicineId = document.getElementById('medicineIdUpdate').value;
+        const amountToSubtract = document.getElementById('medicineAmountSubtract').value;
+
+        console.log("Medicine ID to update:", medicineId);
+        console.log("Amount to subtract:", amountToSubtract);
+
+        if (!medicineId || !amountToSubtract) {
+            console.error('One or more input fields are missing.');
+            document.getElementById("updateStatusMessage").innerText = 'Please fill in all fields.';
+            return;
+        }
+
+        const tx = await contract.subtractMedicineAmount(medicineId, amountToSubtract);
+        await tx.wait();
+        console.log("Transaction completed:", tx);
+
+        document.getElementById("updateStatusMessage").innerText = 'Medicine amount subtracted successfully!';
+    } catch (error) {
+        document.getElementById("updateStatusMessage").innerText = `Error: ${error.message}`;
+        console.error("Error subtracting medicine amount:", error);
+    }
+});
+
+
+async function loadBuyRequests() {
+    console.log("Loading buy requests...");
+    
+    const contract = await loadContract();
+    const requestCount = await contract.requestCount();
+    console.log("Total buy requests:", requestCount.toString()); 
+
+    const requests = [];
+	const indexes = [];
+
+    for (let i = 0; i <= requestCount-1; i++) {
+        try {
+            const request = await contract.buyRequests(i);
+            
+            console.log(`Request ${i}:`, request);
+
+            if (!request.approved && !request.rejected) {
+                requests.push(request);
+				indexes.push(i);
+            }
+        } catch (error) {
+            console.error(`Error fetching request ${i}:`, error);
+        }
+    }
+
+    console.log("Filtered buy requests (not approved):", requests);
+    displayBuyRequests(requests,indexes);
+}
+
+
+function displayBuyRequests(requests,indexes) {
+    const requestsDiv = document.getElementById("buyRequests");
+    requestsDiv.innerHTML = '';
+
+    requests.forEach((request, index) => {
+        console.log("Displaying request:", request);
+        const requestElement = document.createElement("div");
+        requestElement.innerHTML = `
+            <p>Medicine ID: ${request.medicineId}</p>
+            <p>Buyer: ${request.buyer}</p>
+            <p>Requested Amount: ${request.requestedAmount}</p>
+            <button onclick="approveRequest(${indexes[index]})">Approve</button>
+            <button onclick="rejectRequest(${indexes[index]})">Reject</button>
+        `;
+        requestsDiv.appendChild(requestElement);
+    });
+}
+
+async function approveRequest(requestId) {
+    const contract = await loadContract();
+    try {
+        console.log(`Approving request ID: ${requestId}`);
+        const tx = await contract.approveBuyRequest(requestId);
+        await tx.wait();
+        alert(`Request ${requestId} approved!`);
+        loadBuyRequests();  
+    } catch (error) {
+        console.error("Error approving request:", error);
+    }
+}
+
+async function rejectRequest(requestId) {
+    const contract = await loadContract();
+    try {
+        console.log(`Rejecting request ID: ${requestId}`);
+        const tx = await contract.rejectBuyRequest(requestId);
+        await tx.wait();
+        alert(`Request ${requestId} rejected!`);
+        loadBuyRequests();  
+    } catch (error) {
+        console.error("Error rejecting request:", error);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", loadBuyRequests);
+window.approveRequest = approveRequest;
+window.rejectRequest = rejectRequest; 

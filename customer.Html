@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Record - Customer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.2.0/ethers.umd.min.js"></script>
+    <script type="module" src="customer.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="data:,">
+
+</head>
+
+<body>
+    <h1>Medicine Record - Customer</h1>
+
+
+
+    <div>
+        <h2>Search Medicine Details</h2>
+        <input type="text" id="getMedicineId" placeholder="Medicine ID" required>
+        <button id="getMedicineButton">Get Medicine Details</button>
+        <div id="medicineInfo"></div>
+    </div>
+
+    <div>
+        <h2>Check Medicine Availability</h2>
+        <input type="text" id="medicineIdCheck" placeholder="Medicine ID" required>
+        <button id="checkAvailabilityButton">Check Availability</button>
+        <div id="availabilityMessage"></div>
+    </div>
+
+
+    
+    <div>
+        <h2>Buy Medicine</h2>
+        <input type="text" id="buyMedicineId" placeholder="Medicine ID" required>
+        <input type="number" id="medicineAmount" placeholder="Amount" required min="1">
+        <button id="buyMedicineButton">Buy</button>
+        <div id="medicineBuy"></div>
+    </div>
+
+    <div>
+        <h2>View Your Requests</h2>
+        <input type="text" id="cryptoAddress" placeholder="Crypto Address" required>
+        <button id="viewMedicinesButton">Submit</button>
+        <div id="cryptoMessage"></div>
+        <div id="medicinesList"></div>
+    </div>
+
+</body>
+
+</html>

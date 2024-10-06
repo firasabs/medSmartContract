@@ -1,0 +1,136 @@
+/* styles.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #e0f7fa, #f9fbe7);
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    min-height: 100vh;
+    transition: background-color 0.4s ease;
+}
+
+h1 {
+    text-align: center;
+    font-size: 4rem;
+    background: -webkit-linear-gradient(#43A047, #1B5E20);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+div {
+    max-width: 600px;
+    width: 100%;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+div:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+h2 {
+    font-size: 1.8rem;
+    color: #2E7D32;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #81C784;
+    font-weight: 600;
+}
+
+input[type="text"], input[type="number"], input[type="file"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+input[type="text"], input[type="number"], input[type="file"],input[type="password"] {
+    width: 100%;
+    padding: 15px 20px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1.1rem;
+    background-color: #f9f9f9;
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    background: linear-gradient(90deg, #4CAF50, #388E3C);
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.3s ease;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(90deg, #66BB6A, #43A047);
+    transform: translateY(-2px);
+}
+
+#medicineInfo {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    font-size: 1.1rem;
+}
+
+#statusMessage {
+    margin-top: 30px;
+    padding: 20px;
+    font-size: 1.2rem;
+    background-color: rgba(244, 67, 54, 0.1); /* Light red background for error */
+    border: 1px solid #f44336;
+    color: #f44336;
+    border-radius: 10px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease-in-out, transform 0.3s ease-in-out;
+    opacity: 0; /* Initially hidden */
+}
+
+/* This class will show the status message */
+.show-status {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animations to display the status smoothly */
+.show-status-enter {
+    transform: translateY(20px);
+    opacity: 0;
+}
+
+.show-status-enter-active {
+    transform: translateY(0);
+    opacity: 1;
+    transition: opacity 0.3s, transform 0.3s;
+}

@@ -1,35 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medicine Record</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.2.0/ethers.umd.min.js"></script>
     <script type="module" src="app.js"></script>
+    <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <h1>Medicine Record</h1>
 
-    <!-- Add Medicine Section -->
+<body>
+    <h1>Medicine Record - Admin</h1>
+
+
     <div>
-        <h2>Add Medicine</h2>
-        <input type="text" id="medicineIdInput" placeholder="Medicine ID" required>
-        <input type="text" id="medicineNameInput" placeholder="Medicine Name" required>
-        <input type="number" id="medicineAmountInput" placeholder="Amount" required>
-        <input type="text" id="expiryDateInput" placeholder="Expiry Date" required>
-        <button id="addMedicineButton">Add Medicine</button>
+        <h2>Pending Buy Requests</h2>
+        <div id="buyRequests"></div>
     </div>
 
-    <!-- Get Medicine Details Section -->
+    <div>
+        <h2>Add or Remove Medicine</h2>
+        <input type="text" id="medicineId" placeholder="Medicine ID" required>
+        <input type="text" id="medicineName" placeholder="Medicine Name" required>
+        <input type="number" id="medicineAmount" placeholder="Amount" required>
+        <input type="text" id="expiryDate" placeholder="Expiry Date" required>
+        <input type="file" id="medicineDocument" required>
+        <button id="addMedicineButton">Add Medicine</button>
+        <button id="removeMedicineButton">Remove Medicine</button>
+        <div id="statusMessage">Status message will appear here.</div>
+    </div>
+
     <div>
         <h2>Get Medicine Details</h2>
-        <input type="text" id="getMedicineIdInput" placeholder="Medicine ID" required>
+        <input type="text" id="getMedicineId" placeholder="Medicine ID" required>
         <button id="getMedicineButton">Get Medicine Details</button>
         <div id="medicineInfo"></div>
+        <div id="statusMessage">Status message will appear here.</div>
     </div>
 
-    <!-- Display success or error messages -->
-    <div id="statusMessage"></div>
+    <div>
+        <h2>Update Medicine Amount (Subtract)</h2>
+        <input type="text" id="medicineIdUpdate" placeholder="Medicine ID" required>
+        <input type="number" id="medicineAmountSubtract" placeholder="Amount to Subtract" required>
+        <button id="subtractMedicineButton">Subtract Amount</button>
+        <div id="updateStatusMessage">Status message will appear here.</div>
+    </div>
+
+
+
 
 </body>
+
 </html>
